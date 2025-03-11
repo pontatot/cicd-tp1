@@ -38,4 +38,6 @@ jobs:
         go-version: '1.23'
 
     - name: Run tests
-      run: go test go-web-service/ -v
+      run: |-
+        cd go-web-service
+        go test -v
