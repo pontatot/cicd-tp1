@@ -12,6 +12,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// DB is the global database connection pool
 var DB *sql.DB
 
 func main() {
@@ -47,6 +48,8 @@ func main() {
 	log.Fatal(http.ListenAndServe(addr+":"+port, nil))
 }
 
+// CityHandler handles HTTP requests for city resources,
+// supporting GET (list all cities) and POST (create new city) methods
 func CityHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
@@ -93,6 +96,8 @@ func CityHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// HealthHandler responds to health check requests
+// Returns 204 No Content if the service is healthy
 func HealthHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)

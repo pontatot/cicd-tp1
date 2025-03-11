@@ -1,5 +1,6 @@
 package models
 
+// City represents a French city with its geographical and administrative information
 type City struct {
 	ID             int     `json:"id"`
 	DepartmentCode string  `json:"department_code"`
