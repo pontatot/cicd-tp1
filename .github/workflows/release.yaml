@@ -19,7 +19,8 @@ jobs:
       run: |-
         cd go-web-service
         docker build -t city-api .
-        docker tag city-api '${{ secrets.REGISTRY_URL }}/city-api:${{ github.ref_name#v }}'
+        VERSION=$(echo github.ref_name | sed 's/^v//')
+        docker tag city-api '${{ secrets.REGISTRY_URL }}/city-api:$VERSION'
 
     - name: Push Docker image
       run: docker push -a '${{ secrets.REGISTRY_URL }}/city-api'
