@@ -21,8 +21,7 @@ jobs:
         docker build -t city-api .
         VERSION=$(echo '${{ github.ref_name }}' | sed 's/^v//')
         echo $VERSION
-        echo '${{ env.VERSION }}'
-        docker tag city-api '${{ secrets.REGISTRY_URL }}/city-api:${{ env.VERSION }}'
+        docker tag city-api '${{ secrets.REGISTRY_URL }}/city-api:'$VERSION
 
     - name: Push Docker image
       run: docker push -a '${{ secrets.REGISTRY_URL }}/city-api'
