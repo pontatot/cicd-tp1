@@ -56,7 +56,7 @@ jobs:
       run: |-
         cd go-web-service
         docker build -t city-api .
-        docker tag city-api ${{ secrets.REGISTRY_URL }}/city-api:latest
+        docker tag city-api '${{ secrets.REGISTRY_URL }}/city-api:latest'
 
     - name: Push Docker image
       run: docker push -a '${{ secrets.REGISTRY_URL }}/city-api'
