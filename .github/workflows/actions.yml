@@ -49,7 +49,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Log into registry
+      run: echo '${{ secrets.REGISTRY_PASSWORD }}' | docker login ${{ secrets.REGISTRY_URL }} -u '${{ secrets.REGISTRY_USERNAME }}' --password-stdin
+
     - name: Build Dockerfile
       run: |-
         cd go-web-service
-        docker build .
+        docker build -t city-api .
+        docker tag city-api ${{ secrets.REGISTRY_URL }}/city-api:latest
+
+    - name: Push Docker image
+      run: docker push -a '${{ secrets.REGISTRY_URL }}/city-api'
