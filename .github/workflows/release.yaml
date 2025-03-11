@@ -1,0 +1,25 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Log into registry
+      run: echo '${{ secrets.REGISTRY_PASSWORD }}' | docker login ${{ secrets.REGISTRY_URL }} -u '${{ secrets.REGISTRY_USERNAME }}' --password-stdin
+
+    - name: Build Dockerfile
+      run: |-
+        cd go-web-service
+        docker build -t city-api .
+        docker tag city-api '${{ secrets.REGISTRY_URL }}/city-api:${{ github.ref_name#v }}'
+
+    - name: Push Docker image
+      run: docker push -a '${{ secrets.REGISTRY_URL }}/city-api'
