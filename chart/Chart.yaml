@@ -10,5 +10,5 @@ type: application
 
 dependencies:
   - name: postgresql
-    version: "10.3.11"
+    version: "16.5.0"
     repository: "https://charts.bitnami.com/bitnami"

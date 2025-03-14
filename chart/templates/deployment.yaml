@@ -18,7 +18,7 @@ spec:
         - name: go-web-service
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
-            - containerPort: "{{ .Values.service.port }}"
+            - containerPort: {{ .Values.service.port }}
           env:
             - name: CITY_API_ADDR
               value: "0.0.0.0"

@@ -11,15 +11,6 @@ service:
   type: ClusterIP
   port: 8080
 
-ingress:
-  enabled: false
-  annotations: {}
-  hosts:
-    - host: go-web.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-
 database:
   enabled: true
   host: postgresql
