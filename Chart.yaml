@@ -1,0 +1,14 @@
+apiVersion: v2
+name: go-web-service
+version: 1.0.0
+description: A Helm chart for deploying the Go web service
+
+sources:
+  - https://github.com/pontatot/cicd-tp1.git
+
+type: application
+
+dependencies:
+  - name: postgresql
+    version: "10.3.11"
+    repository: "https://charts.bitnami.com/bitnami"

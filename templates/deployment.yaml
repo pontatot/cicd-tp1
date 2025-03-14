@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-deployment
+  labels:
+    app: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      containers:
+        - name: go-web-service
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: "{{ .Values.service.port }}"
+          env:
+            - name: CITY_API_ADDR
+              value: "0.0.0.0"
+            - name: CITY_API_PORT
+              value: "{{ .Values.service.port }}"
+            - name: CITY_API_DB_URL
+              value: "{{ .Values.database.host }}:5432/{{ .Values.database.name }}"
+            - name: CITY_API_DB_USER
+              value: "{{ .Values.database.user }}"
+            - name: CITY_API_DB_PWD
+              value: "{{ .Values.database.password }}"

@@ -1,0 +1,28 @@
+debug: false
+
+replicaCount: 2
+
+image:
+  repository: harbor.pyxis.dopolytech.fr/main/city-api
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: go-web.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+database:
+  enabled: true
+  host: postgresql
+  user: user
+  password: password
+  name: city_api
