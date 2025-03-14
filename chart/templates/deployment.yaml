@@ -25,8 +25,8 @@ spec:
             - name: CITY_API_PORT
               value: "{{ .Values.service.port }}"
             - name: CITY_API_DB_URL
-              value: "{{ .Values.database.host }}:5432/{{ .Values.database.name }}"
+              value: "{{ .Release.Name }}-postgresql:5432/{{ .Values.postgresql.auth.database }}"
             - name: CITY_API_DB_USER
-              value: "{{ .Values.database.user }}"
+              value: "{{ .Values.postgresql.auth.username }}"
             - name: CITY_API_DB_PWD
-              value: "{{ .Values.database.password }}"
+              value: "{{ .Values.postgresql.auth.password }}"

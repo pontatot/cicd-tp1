@@ -11,9 +11,8 @@ service:
   type: ClusterIP
   port: 8080
 
-database:
-  enabled: true
-  host: postgresql
-  user: user
-  password: password
-  name: city_api
+postgresql:
+  auth:
+    username: postgres
+    password: postgres
+    database: city_api
