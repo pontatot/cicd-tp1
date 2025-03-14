@@ -24,6 +24,12 @@ services:
       CITY_API_DB_USER: postgres
       CITY_API_DB_PWD: postgres
 
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
 
 volumes:
   postgres_data:
