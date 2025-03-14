@@ -23,5 +23,15 @@ jobs:
         echo $VERSION
         docker tag city-api '${{ secrets.REGISTRY_URL }}/city-api:'$VERSION
 
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'city-api'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
+
     - name: Push Docker image
       run: docker push -a '${{ secrets.REGISTRY_URL }}/city-api'
