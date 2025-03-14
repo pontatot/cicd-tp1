@@ -10,12 +10,26 @@ import (
 	"os"
 
 	_ "github.com/lib/pq"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 // DB is the global database connection pool
 var DB *sql.DB
 
+var (
+	requestCount = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "http_requests_total",
+			Help: "Number of HTTP requests received",
+		},
+		[]string{"path"},
+	)
+)
+
 func main() {
+	prometheus.MustRegister(requestCount)
+
 	// Get environment variables with defaults
 	addr := getEnvOrDefault("CITY_API_ADDR", "127.0.0.1")
 	port := getEnvOrDefault("CITY_API_PORT", "2022")
@@ -43,7 +57,9 @@ func main() {
 	http.HandleFunc("/city", CityHandler)
 	http.HandleFunc("/_health", HealthHandler)
 
-	// Start server
+	// Expose metrics endpoint
+	http.Handle("/metrics", promhttp.Handler())
+
 	log.Printf("Server starting on %s:%s", addr, port)
 	log.Fatal(http.ListenAndServe(addr+":"+port, nil))
 }

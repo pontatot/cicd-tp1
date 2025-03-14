@@ -1,0 +1,28 @@
+global:
+  scrape_interval: 15s  # Intervalle de collecte des métriques
+  evaluation_interval: 15s  # Intervalle d'évaluation des règles
+
+scrape_configs:
+  - job_name: 'go-web-service'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['cicd-tp1-go-web-1:8080']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        regex: '(.*):(.*)'
+        replacement: '${1}'
+  
+  # Scraping du serveur Prometheus lui-même
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+
+rule_files:
+  # - "alert_rules.yml"  # Si vous souhaitez définir des alertes
+
