@@ -1,6 +1,4 @@
-debug: false
-
-replicaCount: 2
+replicaCount: 1
 
 image:
   repository: harbor.pyxis.dopolytech.fr/main/city-api
