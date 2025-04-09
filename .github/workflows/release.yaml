@@ -15,13 +15,15 @@ jobs:
     - name: Log into registry
       run: echo '${{ secrets.REGISTRY_PASSWORD }}' | docker login ${{ secrets.REGISTRY_URL }} -u '${{ secrets.REGISTRY_USERNAME }}' --password-stdin
 
-    - name: Build Dockerfile
+    - name: Pull and tag image
       run: |-
-        cd go-web-service
-        docker build -t city-api .
+        docker pull '${{ secrets.REGISTRY_URL }}/city-api:${{ github.sha }}'
+        
+        # Create version tag from release tag (remove 'v' prefix)
         VERSION=$(echo '${{ github.ref_name }}' | sed 's/^v//')
-        echo $VERSION
-        docker tag city-api '${{ secrets.REGISTRY_URL }}/city-api:'$VERSION
+        echo "Version: $VERSION"
+        
+        docker tag '${{ secrets.REGISTRY_URL }}/city-api:${{ github.sha }}' '${{ secrets.REGISTRY_URL }}/city-api:'$VERSION
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
