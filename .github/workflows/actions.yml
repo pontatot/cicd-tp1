@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Go
       uses: actions/setup-go@v5
@@ -32,7 +32,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Go
       uses: actions/setup-go@v5
@@ -50,7 +50,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Log into registry
       run: echo '${{ secrets.REGISTRY_PASSWORD }}' | docker login ${{ secrets.REGISTRY_URL }} -u '${{ secrets.REGISTRY_USERNAME }}' --password-stdin
