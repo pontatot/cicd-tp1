@@ -52,10 +52,16 @@ jobs:
     - name: Log into registry
       run: echo '${{ secrets.REGISTRY_PASSWORD }}' | docker login ${{ secrets.REGISTRY_URL }} -u '${{ secrets.REGISTRY_USERNAME }}' --password-stdin
 
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+        
+    - name: Pull images for cache
+      run: docker pull '${{ secrets.REGISTRY_URL }}/city-api:latest'
+
     - name: Build Dockerfile
       run: |-
         cd go-web-service
-        docker build -t city-api .
+        docker build --cache-to type=inline --cache-from 'type=registry,ref=${{ secrets.REGISTRY_URL }}/city-api:latest' -t city-api .
         docker tag city-api '${{ secrets.REGISTRY_URL }}/city-api:latest'
         docker tag city-api '${{ secrets.REGISTRY_URL }}/city-api:${{ github.sha }}'
 
