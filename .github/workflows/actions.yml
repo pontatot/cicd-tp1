@@ -5,6 +5,7 @@ on:
     branches: ['**']
     paths:
       - 'go-web-service/**'
+  workflow_dispatch:
 
 jobs:
   lint:
