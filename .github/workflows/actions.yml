@@ -2,9 +2,9 @@ name: Actions
 
 on:
   push:
-    branches:
-      - main
-      - 'feature/*'
+    branches: ['**']
+    paths:
+      - 'go-web-service/**'
 
 jobs:
   lint:
