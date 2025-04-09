@@ -5,7 +5,7 @@ on:
     tags: ['v*.*.*']
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,7 +28,7 @@ jobs:
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
-        image-ref: 'city-api:${{ github.sha }}'
+        image-ref: '${{ secrets.REGISTRY_URL }}/city-api:${{ github.sha }}'
         format: 'table'
         exit-code: '1'
         ignore-unfixed: true
