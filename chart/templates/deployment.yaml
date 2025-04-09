@@ -14,6 +14,11 @@ spec:
       labels:
         app: {{ .Chart.Name }}
     spec:
+      initContainers:
+        - name: wait-for-db
+          image: postgres:latest
+          command: ['sh', '-c', 
+            'until pg_isready -h {{ .Release.Name }}-postgresql:5432 -U {{ .Values.postgresql.auth.username }}; do echo waiting for database; sleep 2; done;']
       containers:
         - name: go-web-service
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

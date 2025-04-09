@@ -1,4 +1,4 @@
-create table city (
+create or replace table city (
     id int primary key,
     department_code varchar(255) not null,
     insee_code varchar(255),

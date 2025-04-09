@@ -16,3 +16,9 @@ postgresql:
     username: postgres
     password: postgres
     database: city_api
+  primary:
+    persistence:
+      enabled: true
+      size: 1Gi
+    initdb:
+      scriptsConfigMap: city-init-schema
