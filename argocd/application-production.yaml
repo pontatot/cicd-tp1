@@ -15,8 +15,6 @@ spec:
       valueFiles:
         - values.yaml
       parameters:
-        - name: image.tag
-          value: "latest"
         - name: postgresql.postgresqlDatabase
           value: "city_api"
   destination:
