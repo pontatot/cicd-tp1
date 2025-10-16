@@ -7,8 +7,3 @@ sources:
   - https://github.com/pontatot/cicd-tp1.git
 
 type: application
-
-dependencies:
-  - name: postgresql
-    version: "16.5.0"
-    repository: "https://charts.bitnami.com/bitnami"

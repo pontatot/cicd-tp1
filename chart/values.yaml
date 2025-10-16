@@ -10,13 +10,10 @@ service:
   port: 8080
 
 postgresql:
-  auth:
-    username: postgres
-    password: postgres
-    database: city_api
-  primary:
-    persistence:
-      enabled: true
-      size: 1Gi
-    initdb:
-      scriptsConfigMap: city-init-schema
+  postgresqlUsername: postgres
+  postgresqlPassword: postgres
+  postgresqlDatabase: city_api
+  persistence:
+    enabled: true
+    size: 1Gi
+  initdbScriptsConfigMap: city-init-schema

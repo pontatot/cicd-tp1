@@ -18,7 +18,7 @@ spec:
         - name: wait-for-db
           image: postgres:latest
           command: ['sh', '-c', 
-            'until pg_isready -h {{ .Release.Name }}-postgresql:5432 -U {{ .Values.postgresql.auth.username }}; do echo waiting for database; sleep 2; done;']
+            'until pg_isready -h {{ .Release.Name }}-postgresql:5432 -U {{ .Values.postgresql.postgresqlUsername }}; do echo waiting for database; sleep 2; done;']
       containers:
         - name: go-web-service
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -30,8 +30,8 @@ spec:
             - name: CITY_API_PORT
               value: "{{ .Values.service.port }}"
             - name: CITY_API_DB_URL
-              value: "{{ .Release.Name }}-postgresql:5432/{{ .Values.postgresql.auth.database }}"
+              value: "{{ .Release.Name }}-postgresql:5432/{{ .Values.postgresql.postgresqlDatabase }}"
             - name: CITY_API_DB_USER
-              value: "{{ .Values.postgresql.auth.username }}"
+              value: "{{ .Values.postgresql.postgresqlUsername }}"
             - name: CITY_API_DB_PWD
-              value: "{{ .Values.postgresql.auth.password }}"
+              value: "{{ .Values.postgresql.postgresqlPassword }}"
