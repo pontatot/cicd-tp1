@@ -18,7 +18,7 @@ spec:
         - name: wait-for-db
           image: postgres:latest
           command: ['sh', '-c', 
-            'until pg_isready -h {{ .Release.Name }}-postgresql:5432 -U {{ .Values.postgresql.postgresqlUsername }}; do echo waiting for database; sleep 2; done;']
+            'until pg_isready -h {{ .Release.Name }}-postgresql -U {{ .Values.postgresql.postgresqlUsername }} -d {{ .Values.postgresql.postgresqlDatabase }}; do echo waiting for database; sleep 2; done;']
       containers:
         - name: go-web-service
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
