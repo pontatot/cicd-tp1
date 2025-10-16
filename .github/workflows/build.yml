@@ -39,6 +39,10 @@ jobs:
         if [ "${{ github.ref }}" == "refs/heads/main" ]; then
           docker tag city-api 'ghcr.io/${{ github.repository_owner }}/city-api:latest'
         fi
+        # Tag for PR environments if this is a pull request
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          docker tag city-api 'ghcr.io/${{ github.repository_owner }}/city-api:pr-${{ github.event.number }}'
+        fi
 
     - name: Push Docker image
       run: docker push -a 'ghcr.io/${{ github.repository_owner }}/city-api'
