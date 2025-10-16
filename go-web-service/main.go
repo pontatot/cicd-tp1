@@ -113,14 +113,18 @@ func CityHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // HealthHandler responds to health check requests
-// Returns 200 OK with "ok" content if the service is healthy
+// Returns 200 OK with JSON status if the service is healthy
 func HealthHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
+
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("ok"))
+
+	response := map[string]string{"status": "healthy"}
+	json.NewEncoder(w).Encode(response)
 }
 
 func getEnvOrDefault(key, defaultValue string) string {

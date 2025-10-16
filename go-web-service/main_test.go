@@ -96,7 +96,12 @@ func TestHealthHandler(t *testing.T) {
 		HealthHandler(w, req)
 
 		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Equal(t, "ok", w.Body.String())
+		assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
+
+		var response map[string]string
+		err := json.NewDecoder(w.Body).Decode(&response)
+		assert.NoError(t, err)
+		assert.Equal(t, "healthy", response["status"])
 	})
 
 	t.Run("Invalid method", func(t *testing.T) {
