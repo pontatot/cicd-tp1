@@ -40,6 +40,12 @@ spec:
               value: 'city-api-pr-{{number}}'
             - name: fullnameOverride
               value: 'city-api-pr-{{number}}'
+            - name: databaseCopy.enabled
+              value: 'true'
+            - name: databaseCopy.sourceNamespace
+              value: 'city-api-production'
+            - name: databaseCopy.sourceDatabase
+              value: 'city_api'
       destination:
         server: https://kubernetes.default.svc
         namespace: 'city-api-pr-{{number}}'

@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/pontatot/city-api
-  tag: adef4ba22732b82174ef203fdb4ea20274ff6b64
+  tag: 3ebc69fa13a3cccba70bb349a2492458b5de04b5
   pullPolicy: Always
   pullSecret: registry-secret
 
@@ -18,3 +18,9 @@ postgresql:
     enabled: true
     size: 1Gi
   initdbScriptsConfigMap: city-init-schema
+
+# Database copy configuration for PR environments
+databaseCopy:
+  enabled: false  # Set to true for PR environments
+  sourceNamespace: city-api-production
+  sourceDatabase: city_api
