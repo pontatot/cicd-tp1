@@ -21,6 +21,40 @@ spec:
           image: postgres:latest
           command: ['sh', '-c', 
             'until pg_isready -h {{ .Release.Name }}-postgresql -U {{ .Values.postgresql.postgresqlUsername }} -d {{ .Values.postgresql.postgresqlDatabase }}; do echo waiting for database; sleep 2; done;']
+        {{- if .Values.databaseCopy.enabled }}
+        - name: copy-production-data
+          image: postgres:latest
+          command:
+            - /bin/bash
+            - -c
+            - |
+              echo "Copying production database to PR environment..."
+              
+              # Check if source database is available
+              if ! pg_isready -h {{ .Values.databaseCopy.sourceNamespace }}-postgresql.{{ .Values.databaseCopy.sourceNamespace }}.svc.cluster.local -U {{ .Values.postgresql.postgresqlUsername }} -d {{ .Values.databaseCopy.sourceDatabase }}; then
+                echo "ERROR: Source database is not ready"
+                exit 1
+              fi
+              
+              echo "Dumping production database..."
+              PGPASSWORD={{ .Values.postgresql.postgresqlPassword }} pg_dump \
+                -h {{ .Values.databaseCopy.sourceNamespace }}-postgresql.{{ .Values.databaseCopy.sourceNamespace }}.svc.cluster.local \
+                -U {{ .Values.postgresql.postgresqlUsername }} \
+                -d {{ .Values.databaseCopy.sourceDatabase }} \
+                --no-owner --no-privileges > /tmp/prod_dump.sql
+              
+              echo "Restoring to PR database..."
+              PGPASSWORD={{ .Values.postgresql.postgresqlPassword }} psql \
+                -h {{ .Release.Name }}-postgresql \
+                -U {{ .Values.postgresql.postgresqlUsername }} \
+                -d {{ .Values.postgresql.postgresqlDatabase }} \
+                -f /tmp/prod_dump.sql
+              
+              echo "Database copy completed successfully!"
+          env:
+            - name: PGPASSWORD
+              value: {{ .Values.postgresql.postgresqlPassword }}
+        {{- end }}
       containers:
         - name: go-web-service
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
