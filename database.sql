@@ -1,4 +1,4 @@
-create or replace table city (
+CREATE TABLE IF NOT EXISTS city (
     id int primary key,
     department_code varchar(255) not null,
     insee_code varchar(255),
@@ -6,4 +6,4 @@ create or replace table city (
     name varchar(255) not null,
     lat float not null,
     lon float not null
-)
+);
