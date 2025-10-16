@@ -28,8 +28,11 @@ jobs:
       run: |-
         cd go-web-service
         docker build --cache-to type=inline --cache-from 'type=registry,ref=ghcr.io/${{ github.repository_owner }}/city-api:latest' -t city-api .
-        docker tag city-api 'ghcr.io/${{ github.repository_owner }}/city-api:latest'
         docker tag city-api 'ghcr.io/${{ github.repository_owner }}/city-api:${{ github.sha }}'
+        # Only tag as latest if this is the main branch
+        if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+          docker tag city-api 'ghcr.io/${{ github.repository_owner }}/city-api:latest'
+        fi
         # Tag for PR environments if this is a pull request
         if [ "${{ github.event_name }}" == "pull_request" ]; then
           docker tag city-api 'ghcr.io/${{ github.repository_owner }}/city-api:pr-${{ github.event.number }}'
