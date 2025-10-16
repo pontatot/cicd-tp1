@@ -113,13 +113,14 @@ func CityHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // HealthHandler responds to health check requests
-// Returns 200 OK if the service is healthy
+// Returns 200 OK with "ok" content if the service is healthy
 func HealthHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("ok"))
 }
 
 func getEnvOrDefault(key, defaultValue string) string {
