@@ -95,7 +95,8 @@ func TestHealthHandler(t *testing.T) {
 
 		HealthHandler(w, req)
 
-		assert.Equal(t, http.StatusNoContent, w.Code)
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "ok", w.Body.String())
 	})
 
 	t.Run("Invalid method", func(t *testing.T) {
