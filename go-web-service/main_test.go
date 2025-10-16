@@ -101,7 +101,7 @@ func TestHealthHandler(t *testing.T) {
 		var response map[string]string
 		err := json.NewDecoder(w.Body).Decode(&response)
 		assert.NoError(t, err)
-		assert.Equal(t, "ok", response["status"])
+		assert.Equal(t, "healthy", response["status"])
 	})
 
 	t.Run("Invalid method", func(t *testing.T) {
