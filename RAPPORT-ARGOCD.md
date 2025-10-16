@@ -45,3 +45,44 @@ Le "Pull Request Generator" d'ArgoCD mentionné précedemment nous permet automa
 ### 5) Migrations
 
 Notre application de base ne supportais pas les migrations de base de données
+
+## Déploiement
+
+### Prérequis
+
+- Cluster kubernetes avec permissions admin
+- ArgoCD avec permissions admin
+- Github token
+    - `repo` permissions de lecture des repo privés
+    - `read:packages` permissions pour pull l'image docker de ghcr
+    - `read:org` pour les repos d'organisations
+
+### Secrets Github
+
+```SH
+TOKEN="YOUR_GITHUB_TOKEN"
+
+# GitHub token pour les repos privés
+kubectl create secret generic github-token \
+  --from-literal=token="$TOKEN" \
+  --namespace=argocd
+
+# credentials GitHub pour pull les images ghcr
+kubectl create secret generic github-credentials \
+  --from-literal=username="pontatot" \
+  --from-literal=token="$TOKEN" \
+  --namespace=argocd
+```
+
+### Setup ArgoCD
+
+```SH
+# Cron Job pour setup les secrets ImagePullSecrets et nettoyage des namespaces
+kubectl apply -f argocd/automated-secret-management.yaml
+
+# Environement production
+kubectl apply -f argocd/application-production.yaml
+
+# Environement pour les PR
+kubectl apply -f argocd/applicationset-pr-environments.yaml
+```
