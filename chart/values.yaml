@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/pontatot/city-api
-  tag: latest
+  tag: 3ebc69fa13a3cccba70bb349a2492458b5de04b5
   pullPolicy: Always
   pullSecret: registry-secret
 
