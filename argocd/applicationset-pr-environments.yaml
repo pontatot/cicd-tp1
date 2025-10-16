@@ -1,0 +1,51 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: city-api-pr-environments
+  namespace: argocd
+spec:
+  generators:
+  - pullRequest:
+      github:
+        owner: pontatot
+        repo: cicd-tp1
+        tokenRef:
+          secretName: github-token
+          key: token
+      requeueAfterSeconds: 30
+  template:
+    metadata:
+      name: 'city-api-pr-{{number}}'
+      labels:
+        environment: testing
+        pr-number: '{{number}}'
+      # Automatically remove application when PR is closed/merged
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/pontatot/cicd-tp1.git
+        targetRevision: '{{head_sha}}'
+        path: chart
+        helm:
+          valueFiles:
+            - values.yaml
+          parameters:
+            - name: image.tag
+              value: '{{head_sha}}'
+            - name: postgresql.postgresqlDatabase
+              value: 'city_api_pr_{{number}}'
+            - name: nameOverride
+              value: 'city-api-pr-{{number}}'
+            - name: fullnameOverride
+              value: 'city-api-pr-{{number}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: 'city-api-pr-{{number}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

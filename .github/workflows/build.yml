@@ -3,6 +3,8 @@ name: Build
 on:
   push:
     branches: ['**']
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -28,6 +30,10 @@ jobs:
         docker build --cache-to type=inline --cache-from 'type=registry,ref=ghcr.io/${{ github.repository_owner }}/city-api:latest' -t city-api .
         docker tag city-api 'ghcr.io/${{ github.repository_owner }}/city-api:latest'
         docker tag city-api 'ghcr.io/${{ github.repository_owner }}/city-api:${{ github.sha }}'
+        # Tag for PR environments if this is a pull request
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          docker tag city-api 'ghcr.io/${{ github.repository_owner }}/city-api:pr-${{ github.event.number }}'
+        fi
 
     - name: Push Docker image
       run: docker push -a 'ghcr.io/${{ github.repository_owner }}/city-api'

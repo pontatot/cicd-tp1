@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: city-api-production
+  namespace: argocd
+  labels:
+    environment: production
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/pontatot/cicd-tp1.git
+    targetRevision: main
+    path: chart
+    helm:
+      valueFiles:
+        - values.yaml
+      parameters:
+        - name: image.tag
+          value: "latest"
+        - name: postgresql.postgresqlDatabase
+          value: "city_api"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: city-api-production
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
