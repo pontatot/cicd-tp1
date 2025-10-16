@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: harbor.pyxis.dopolytech.fr/main/city-api
+  repository: ghcr.io/pontatot/city-api
   tag: latest
   pullPolicy: Always
 
